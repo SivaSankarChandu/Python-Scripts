@@ -1,33 +1,22 @@
-import requests
-import json
+import requests 
+import json 
 
-python script run through the postman to copy files in box cloud
+# Input Data 
 
-import requests
-import json
+box_access_token = "Enter the access token here" 
+src_files = ["file1", "file2", "file3"] 
+dst_folder_id = "Enter the destination folder id here" 
 
-# Set the request parameters
-url = 'https://api.box.com/2.0/files/content'
+# API Call 
 
-# Specify the file to be copied
-file_id = '1113023725040'
+headers = { 
+    "Authorization": "Bearer " + box_access_token 
+} 
 
-# Set proper headers
-headers = {'Authorization':'Bearer ASq8MSgjUuMrFSuoZ6f8OwxtMVnAwrSl',
-           'Content-Type':'application/json'}
-
-# Set the parameters
-data={ "name": "filename_copy.txt",
-       "parent": { "id": "190182795566" } }
-
-# Do the HTTP post request
-response = requests.post(url, data=json.dumps(data), headers=headers)
-
-# Check for HTTP codes other than 200
-if response.status_code != 200:
-    print('Status:', response.status_code, 'Problem with the request. Exiting.')
-    exit()
-
-# Decode the JSON response into a dictionary and use the data
-data = response.json()
-print(data)
+for src_file in src_files: 
+    payload = { 
+        "parent": { "id": dst_folder_id }, 
+        "name": src_file 
+    } 
+    response = requests.post("https://api.box.com/2.0/files/content", headers=headers, data=json.dumps(payload)) 
+    print(response.status_code)
